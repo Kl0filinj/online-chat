@@ -1,5 +1,5 @@
 const express = require('express');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -26,6 +26,11 @@ io.on('connection', socket => {
   socket.on('joinRoom', data => {
     socket.join(data);
     console.log(`User CONNECTED TO ROOM ${data}`);
+  });
+
+  socket.on('sendMessage', data => {
+    console.log('SEND MESSAGE', data);
+    socket.to(data.roomId).emit('receiveMessage', data);
   });
 
   socket.on('disconnect', () => {

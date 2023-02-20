@@ -13,8 +13,7 @@ const JoinRoom = ({ socket, dispatch, state }) => {
     console.log(`Connection to room ${state.roomId}`);
     socket.emit('joinRoom', state.roomId);
   };
-  console.log(state);
-
+  //   console.log(state);
   return (
     <Box>
       <Box>
