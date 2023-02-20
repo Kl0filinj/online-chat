@@ -1,16 +1,17 @@
+import { useReducer } from 'react';
+import { io } from 'socket.io-client';
+import JoinRoom from './JoinRoom/JoinRoom';
+import { initialState, reducer } from './reducers/joinReducer';
+import Layout from './Sheared/Layout';
+
+const socket = io.connect('http://localhost:3000');
+
 export const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+    <Layout>
+      <JoinRoom socket={socket} dispatch={dispatch} state={state} />
+    </Layout>
   );
 };
