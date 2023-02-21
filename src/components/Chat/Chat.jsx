@@ -13,8 +13,6 @@ const Chat = ({ socket, state }) => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
-  console.log(messageList);
-
   const sendMessage = async () => {
     const messageId = uuidv4();
     const messageTime =
