@@ -3,9 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
-require('dotenv').config();
+// require('dotenv').config();
 
-const PORT = process.env.PORT;
+// const PORT = process.env.PORT;
 
 const app = express();
 const server = http.createServer(app);
@@ -37,8 +37,8 @@ io.on('connection', socket => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`);
+server.listen(3030, () => {
+  console.log(`Server running. Use our API on port: ${3030}`);
 });
 
 module.exports = { io };
