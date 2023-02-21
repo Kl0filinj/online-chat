@@ -7,6 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Chat = ({ socket, state }) => {
   const [currentMessage, setCurrentMessage] = useState('');
@@ -15,6 +16,7 @@ const Chat = ({ socket, state }) => {
   console.log(messageList);
 
   const sendMessage = async () => {
+    const messageId = uuidv4();
     const messageTime =
       new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes();
     const messageData = {
@@ -22,6 +24,7 @@ const Chat = ({ socket, state }) => {
       author: state.userName,
       message: currentMessage,
       time: messageTime,
+      id: messageId,
     };
     await socket.emit('sendMessage', messageData);
     setMessageList(list => [...list, messageData]);
@@ -42,9 +45,10 @@ const Chat = ({ socket, state }) => {
         <Text color={'white'}>ID: {state.roomId}</Text>
       </Box>
       <Box borderX={'1px solid black'} height={'xs'} overflowY={'scroll'}>
-        {messageList.map(({ message, author, time }) => (
+        {messageList.map(({ message, author, time, id }) => (
           <>
             <Box
+              key={id}
               maxW={'45%'}
               p={'2'}
               ml={author === state.userName && 'auto'}
