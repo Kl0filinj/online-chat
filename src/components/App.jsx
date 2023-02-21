@@ -5,7 +5,7 @@ import JoinRoom from './JoinRoom/JoinRoom';
 import { initialState, reducer } from './reducers/joinReducer';
 import Layout from './Sheared/Layout';
 
-const socket = io.connect('http://localhost:3030');
+const socket = io.connect('https://online-chat-server.onrender.com');
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
