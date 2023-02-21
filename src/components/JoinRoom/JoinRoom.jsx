@@ -5,6 +5,7 @@ import {
   FormHelperText,
   Input,
   Button,
+  Heading,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -12,14 +13,16 @@ const JoinRoom = ({ socket, dispatch, state }) => {
   const handleJoin = () => {
     console.log(`Connection to room ${state.roomId}`);
     socket.emit('joinRoom', state.roomId);
+    dispatch({ type: 'toggleShowChat', payload: true });
   };
-  //   console.log(state);
   return (
     <Box>
-      <Box>
-        <FormControl>
+      <Heading>Online Chat</Heading>
+      <Box textAlign={'center'}>
+        <FormControl maxW={'xs'} mx={'auto'}>
           <FormLabel>User name</FormLabel>
           <Input
+            focusBorderColor="lime"
             type="text"
             value={state.userName}
             onChange={evt =>
@@ -31,9 +34,10 @@ const JoinRoom = ({ socket, dispatch, state }) => {
           />
           <FormHelperText>Create your own User Name</FormHelperText>
         </FormControl>
-        <FormControl>
-          <FormLabel>roomId</FormLabel>
+        <FormControl maxW={'xs'} mx={'auto'}>
+          <FormLabel>RoomId</FormLabel>
           <Input
+            focusBorderColor="lime"
             type="text"
             value={state.roomId}
             onChange={evt =>
@@ -48,7 +52,9 @@ const JoinRoom = ({ socket, dispatch, state }) => {
           </FormHelperText>
         </FormControl>
       </Box>
-      <Button onClick={handleJoin}>Join Room</Button>
+      <Button onClick={handleJoin} mt={'5'} colorScheme="whatsapp">
+        Join Room
+      </Button>
     </Box>
   );
 };

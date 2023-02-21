@@ -11,8 +11,11 @@ export const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <Layout>
-      <JoinRoom socket={socket} dispatch={dispatch} state={state} />
-      <Chat socket={socket} state={state} />
+      {!state.showChat ? (
+        <JoinRoom socket={socket} dispatch={dispatch} state={state} />
+      ) : (
+        <Chat socket={socket} state={state} />
+      )}
     </Layout>
   );
 };
