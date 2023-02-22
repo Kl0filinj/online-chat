@@ -1,11 +1,11 @@
 import JoinRoom from './Auth/Login';
-import Layout from './sheared/Layout';
 // import socket from 'utils/socketConnection';
 import { Route, Routes } from 'react-router-dom';
 import { RedirectedRoute } from './SecureRoutes/RedirectedRoute';
 import { PrivateRoute } from './SecureRoutes/PrivateRoute';
 import RoomsHub from './RoomsHub/RoomsHub';
 import Register from './Auth/Register';
+import Layout from './sheared/Layout';
 
 export const App = () => {
   return (
