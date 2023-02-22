@@ -1,6 +1,7 @@
 import { Container } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <Container
       maxW="container.lg"
@@ -12,7 +13,9 @@ const Layout = ({ children }) => {
       borderRadius={'md'}
       p={'5'}
     >
-      {children}
+      {/* <Suspense fallback={<Loader />}> */}
+      <Outlet />
+      {/* </Suspense> */}
     </Container>
   );
 };

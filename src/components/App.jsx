@@ -1,21 +1,48 @@
-import { useReducer } from 'react';
-import { io } from 'socket.io-client';
-import Chat from './Chat/Chat';
-import JoinRoom from './JoinRoom/JoinRoom';
-import { initialState, reducer } from './reducers/joinReducer';
-import Layout from './Sheared/Layout';
-
-const socket = io.connect('https://online-chat-server.onrender.com');
+import JoinRoom from './Auth/Login';
+import Layout from './sheared/Layout';
+// import socket from 'utils/socketConnection';
+import { Route, Routes } from 'react-router-dom';
+import { RedirectedRoute } from './SecureRoutes/RedirectedRoute';
+import { PrivateRoute } from './SecureRoutes/PrivateRoute';
+import RoomsHub from './RoomsHub/RoomsHub';
+import Register from './Auth/Register';
 
 export const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <Layout>
-      {!state.showChat ? (
-        <JoinRoom socket={socket} dispatch={dispatch} state={state} />
-      ) : (
-        <Chat socket={socket} state={state} />
-      )}
-    </Layout>
+    <>
+      {/* {!isLoading && ( */}
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* <Route index element={<Home />} /> */}
+          <Route
+            index
+            element={
+              <RedirectedRoute redirectTo="/rooms" component={<JoinRoom />} />
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <RedirectedRoute redirectTo="/rooms" component={<Register />} />
+            }
+          />
+          <Route
+            path="rooms"
+            element={<PrivateRoute redirectTo="/" component={<RoomsHub />} />}
+          />
+          <Route
+            path="rooms/:roomId"
+            element={
+              <PrivateRoute
+                redirectTo="/"
+                component={<div>Current room</div>}
+              />
+            }
+          />
+          <Route path="*" element={<h1>Page Not Found 🥶</h1>} />
+        </Route>
+      </Routes>
+      {/* )} */}
+    </>
   );
 };
