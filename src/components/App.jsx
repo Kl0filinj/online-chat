@@ -1,11 +1,11 @@
-import JoinRoom from './Auth/Login';
+import Login from './Auth/Login';
 // import socket from 'utils/socketConnection';
 import { Route, Routes } from 'react-router-dom';
 import { RedirectedRoute } from './SecureRoutes/RedirectedRoute';
 import { PrivateRoute } from './SecureRoutes/PrivateRoute';
 import RoomsHub from './RoomsHub/RoomsHub';
 import Register from './Auth/Register';
-import Layout from './sheared/Layout';
+import Layout from './sheared/Layout.jsx';
 
 export const App = () => {
   return (
@@ -17,7 +17,7 @@ export const App = () => {
           <Route
             index
             element={
-              <RedirectedRoute redirectTo="/rooms" component={<JoinRoom />} />
+              <RedirectedRoute redirectTo="/rooms" component={<Login />} />
             }
           />
           <Route
