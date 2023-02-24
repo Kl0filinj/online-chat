@@ -2,13 +2,18 @@ import { Box, Button, Heading, Text } from '@chakra-ui/react';
 import CustomInput from 'components/sheared/CustomInput';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { login, register } from 'redux/auth/auth-operations';
+import { isRefreshingSelector } from 'redux/auth/auth-selector';
 // import socket from 'utils/socketConnection';
 import { regesterYupSchema } from 'utils/validationSchemas/validationSchemas';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const dispatch = useDispatch();
+  const isRefreshing = useSelector(isRefreshingSelector);
 
   const handleClick = name => {
     name === 'password'
@@ -18,22 +23,21 @@ const Register = () => {
 
   const initialValues = {
     email: '',
-    userName: '',
+    name: '',
     password: '',
     confirm: '',
   };
 
   const onSubmit = async values => {
-    // const registerData = {
-    //   email: values.email,
-    //   password: values.password,
-    //   name: values.name,
-    // };
-    // const data = await dispatch(register(registerData));
-    // if (data.type === 'auth/register/fulfilled') {
-    //   dispatch(login({ email: values.email, password: values.password }));
-    //   resetForm();
-    // }
+    const registerData = {
+      email: values.email,
+      password: values.password,
+      name: values.name,
+    };
+    const data = await dispatch(register(registerData));
+    if (data.type === 'auth/register/fulfilled') {
+      dispatch(login({ email: values.email, password: values.password }));
+    }
     // if (!data.payload) {
     //   errorToast('Please try again later');
     // }
@@ -61,6 +65,7 @@ const Register = () => {
             as={Form}
             width={{ base: '280px', md: '448px', xl: '458px' }}
             mx={'auto'}
+            my={'10'}
           >
             <CustomInput
               type="email"
@@ -70,7 +75,7 @@ const Register = () => {
             />
             <CustomInput
               type="text"
-              name="userName"
+              name="name"
               id="reg-name"
               placeholder="Name"
             />
@@ -99,7 +104,7 @@ const Register = () => {
               mb="40px"
               h={{ base: '44px', xl: '48px' }}
               width={{ base: '280px', md: '448px', xl: '458px' }}
-              // isLoading={isRefreshing}
+              isLoading={isRefreshing}
               loadingText={'Login'}
               aria-label="login"
             >
@@ -112,7 +117,7 @@ const Register = () => {
                 fontWeight="normal"
                 lineHeight="1.33"
                 letterSpacing="0.04em"
-                color="accent.grey"
+                // color="accent.grey"
                 textAlign="center"
               >
                 Already have an account?

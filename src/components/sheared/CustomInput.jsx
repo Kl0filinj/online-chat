@@ -38,7 +38,7 @@ const CustomInput = ({
               fontSize={{ base: '18px', md: '2xl' }}
               fontWeight={'medium'}
               lineHeight={'1.44'}
-              color={'black'}
+              // color={'black'}
               mb={2}
               mr="0"
             >
@@ -63,12 +63,12 @@ const CustomInput = ({
               color={
                 type === 'date' && form.values.birthday === ''
                   ? 'rgba(27, 27, 27, 0.6)'
-                  : 'black'
+                  : 'white'
               }
               bg="accent.background"
               border="1px solid rgba(128, 90, 213, 0.5)"
               borderRadius="40px"
-              _placeholder={{ color: 'black' }}
+              _placeholder={{ color: 'gray.600' }}
               {...rest}
             />
             {type === 'password' && (

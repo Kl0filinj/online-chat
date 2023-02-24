@@ -1,4 +1,5 @@
 import { Container } from '@chakra-ui/react';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
@@ -9,14 +10,12 @@ const Layout = () => {
       textAlign={'center'}
       as="main"
       mt={'15vh'}
-      border={'2px solid black'}
       borderRadius={'md'}
       p={'5'}
     >
-      21313123
-      {/* <Suspense fallback={<Loader />}> */}
-      <Outlet />
-      {/* </Suspense> */}
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </Container>
   );
 };

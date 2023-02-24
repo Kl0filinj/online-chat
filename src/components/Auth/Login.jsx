@@ -2,12 +2,18 @@ import { Box, Button, Heading, Text } from '@chakra-ui/react';
 import CustomInput from 'components/sheared/CustomInput';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { login } from 'redux/auth/auth-operations';
+import { isRefreshingSelector } from 'redux/auth/auth-selector';
 // import socket from 'utils/socketConnection';
 import { loginYupSchema } from 'utils/validationSchemas/validationSchemas';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const isRefreshing = useSelector(isRefreshingSelector);
+
   const handleShowPasswordClick = () => {
     setShowPassword(prevState => !prevState);
   };
@@ -18,8 +24,8 @@ const Login = () => {
   };
 
   const onSubmit = async values => {
-    // const authData = { email: values.email, password: values.password };
-    // const data = dispatch(login(authData));
+    const authData = { email: values.email, password: values.password };
+    dispatch(login(authData));
   };
 
   // const handleJoin = () => {
@@ -50,6 +56,7 @@ const Login = () => {
             // position="relative"
             width={{ base: '280px', md: '448px', xl: '458px' }}
             mx={'auto'}
+            my={'10'}
           >
             <CustomInput
               type="email"
@@ -74,7 +81,7 @@ const Login = () => {
               mb="40px"
               h={{ base: '44px', xl: '48px' }}
               width={{ base: '280px', md: '448px', xl: '458px' }}
-              // isLoading={isRefreshing}
+              isLoading={isRefreshing}
               loadingText={'Login'}
               aria-label="login"
             >
@@ -87,7 +94,6 @@ const Login = () => {
                 fontWeight="normal"
                 lineHeight="1.33"
                 letterSpacing="0.04em"
-                color="accent.grey"
                 textAlign="center"
               >
                 Don't have an account?
@@ -100,7 +106,7 @@ const Login = () => {
                 fontWeight="normal"
                 lineHeight="1.33"
                 letterSpacing="0.04em"
-                color="#3091EB;"
+                color="#3091EB"
                 textAlign="center"
               >
                 <Link to="/register">Register</Link>

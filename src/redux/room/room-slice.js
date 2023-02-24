@@ -1,16 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getAllRooms } from './room-operations';
 // import persistReducer from 'redux-persist/es/persistReducer';
 // import storage from 'redux-persist/lib/storage';
-import {
-  register,
-  login,
-  // logout,
-  // getCurrentUser,
-  // updateUserAvatar,
-  // updateUser,
-  // addNewPet,
-  // deletePet,
-} from './auth-operations';
+// import {
+//   register,
+//   login,
+
+// } from './auth-operations';
 
 const handlePending = state => {
   state.isRefreshing = true;
@@ -29,40 +25,41 @@ const handleRejected = (state, action) => {
 // };
 
 const initialState = {
-  token: null,
-  user: {},
-  isLoggedIn: false,
-  isRefreshing: false,
+  rooms: [],
+  currentRoom: {},
+  isLoading: false,
   error: null,
 };
 
-const authSlice = createSlice({
-  name: 'auth',
+const roomSlice = createSlice({
+  name: 'room',
   initialState,
   extraReducers: builder => {
     builder
-      .addCase(register.pending, (state, _) => {
+      .addCase(getAllRooms.pending, (state, _) => {
         handlePending(state);
       })
-      .addCase(register.fulfilled, (state, _) => {
-        state.isRefreshing = false;
+      .addCase(getAllRooms.fulfilled, (state, { payload }) => {
+        state.rooms = [...payload];
+        state.isLoading = false;
+        state.error = null;
       })
-      .addCase(register.rejected, (state, action) => {
-        handleRejected(state, action);
-      })
-      .addCase(login.pending, (state, _) => {
-        handlePending(state);
-      })
-      .addCase(login.fulfilled, (state, { payload }) => {
-        console.log('login payload', payload);
-        state.isRefreshing = false;
-        state.user = payload;
-        state.token = payload.token;
-        state.isLoggedIn = true;
-      })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(getAllRooms.rejected, (state, action) => {
         handleRejected(state, action);
       });
+    //   .addCase(login.pending, (state, _) => {
+    //     handlePending(state);
+    //   })
+    //   .addCase(login.fulfilled, (state, { payload }) => {
+    //     console.log('login payload', payload);
+    //     state.isRefreshing = false;
+    //     state.user = payload;
+    //     state.token = payload.token;
+    //     state.isLoggedIn = true;
+    //   })
+    //   .addCase(login.rejected, (state, action) => {
+    //     handleRejected(state, action);
+    //   });
     //   // .addCase(setGoogleToken.pending, (state, action) => {
     //   //   handlePending(state);
     //   // })
@@ -140,4 +137,4 @@ const authSlice = createSlice({
 });
 
 // export const authReducer = persistReducer(authPersistConfig, authSlice.reducer);
-export const authReducer = authSlice.reducer;
+export const roomReducer = roomSlice.reducer;
