@@ -19,8 +19,6 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 200px;
   background: #222222;
   border-radius: 3px;
 }
