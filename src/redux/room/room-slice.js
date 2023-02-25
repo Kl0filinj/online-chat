@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllRooms } from './room-operations';
+import { getAllRooms, getRoomById } from './room-operations';
 // import persistReducer from 'redux-persist/es/persistReducer';
 // import storage from 'redux-persist/lib/storage';
 // import {
@@ -45,6 +45,18 @@ const roomSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllRooms.rejected, (state, action) => {
+        handleRejected(state, action);
+      })
+      .addCase(getRoomById.pending, (state, _) => {
+        handlePending(state);
+      })
+      .addCase(getRoomById.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.currentRoom = { ...payload };
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(getRoomById.rejected, (state, action) => {
         handleRejected(state, action);
       });
     //   .addCase(login.pending, (state, _) => {

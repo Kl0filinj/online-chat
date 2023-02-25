@@ -42,11 +42,11 @@ export const App = () => {
               path="rooms"
               element={<PrivateRoute redirectTo="/" component={<RoomsHub />} />}
             />
-            <Route
+            {/* <Route
               path="rooms/:roomId"
               element={<PrivateRoute redirectTo="/" component={<Chat />} />}
-            />
-            {/* <Route path="rooms" element={<RoomsHub />} /> */}
+            /> */}
+            <Route path="rooms/:roomId" element={<Chat />} />
             <Route path="*" element={<h1>Page Not Found 🥶</h1>} />
           </Route>
         </Routes>

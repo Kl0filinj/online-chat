@@ -21,3 +21,22 @@ export const getAllRooms = createAsyncThunk(
     }
   }
 );
+
+export const getRoomById = createAsyncThunk(
+  'rooms/getRoomById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.get(`/api/rooms/${id}`);
+
+      return data;
+    } catch ({ response }) {
+      //   errorToast('Something went wrong, try to reload the page');
+      const { status, data } = response;
+      const error = {
+        status,
+        message: data.message,
+      };
+      return rejectWithValue(error);
+    }
+  }
+);

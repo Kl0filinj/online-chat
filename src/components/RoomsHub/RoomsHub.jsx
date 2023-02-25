@@ -32,6 +32,7 @@ const RoomsHub = () => {
         <Wrap spacing={4}>
           {rooms.map(({ name, _id }) => (
             <WrapItem
+              key={_id}
               margin={'10px !important'}
               w={'200px'}
               h={'100px'}
