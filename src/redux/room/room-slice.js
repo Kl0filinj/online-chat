@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllRooms, getRoomById } from './room-operations';
+import { getAllRooms, getRoomById, addMessage } from './room-operations';
 // import persistReducer from 'redux-persist/es/persistReducer';
 // import storage from 'redux-persist/lib/storage';
 // import {
@@ -51,102 +51,31 @@ const roomSlice = createSlice({
         handlePending(state);
       })
       .addCase(getRoomById.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.currentRoom = { ...payload };
         state.isLoading = false;
         state.error = null;
       })
       .addCase(getRoomById.rejected, (state, action) => {
         handleRejected(state, action);
+      })
+
+      .addCase(addMessage.fulfilled, (state, { payload }) => {
+        console.log('ADD mESSGAE ');
+        state.currentRoom.messages = [...state.currentRoom.messages, payload];
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(addMessage.rejected, (state, action) => {
+        handleRejected(state, action);
       });
-    //   .addCase(login.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(login.fulfilled, (state, { payload }) => {
-    //     console.log('login payload', payload);
-    //     state.isRefreshing = false;
-    //     state.user = payload;
-    //     state.token = payload.token;
-    //     state.isLoggedIn = true;
-    //   })
-    //   .addCase(login.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   });
-    //   // .addCase(setGoogleToken.pending, (state, action) => {
-    //   //   handlePending(state);
-    //   // })
-    //   // .addCase(setGoogleToken.fulfilled, (state, action) => {
-    //   //   state.token = payload.token;
-    //   // })
-    //   // .addCase(setGoogleToken.rejected, (state, action) => {
-    //   //   handleRejected(state, action);
-    //   // })
-    //   .addCase(logout.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(logout.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.user = {};
-    //     state.token = '';
-    //     state.isLoggedIn = false;
-    //   })
-    //   .addCase(logout.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   })
-    //   .addCase(getCurrentUser.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(getCurrentUser.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.isLoggedIn = true;
-    //     state.user = payload;
-    //   })
-    //   .addCase(getCurrentUser.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   })
-    //   .addCase(updateUser.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(updateUser.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.user = { ...state.user, ...payload };
-    //   })
-    //   .addCase(updateUser.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   })
-    //   .addCase(updateUserAvatar.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(updateUserAvatar.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.user = { ...state.user, ...payload };
-    //   })
-    //   .addCase(updateUserAvatar.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   })
-    //   .addCase(addNewPet.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(addNewPet.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.user.pets = [payload, ...state.user.pets];
-    //     state.error = null;
-    //   })
-    //   .addCase(addNewPet.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   })
-    //   .addCase(deletePet.pending, (state, _) => {
-    //     handlePending(state);
-    //   })
-    //   .addCase(deletePet.fulfilled, (state, { payload }) => {
-    //     state.isRefreshing = false;
-    //     state.user.pets = state.user.pets.filter(({ _id }) => _id !== payload);
-    //   })
-    //   .addCase(deletePet.rejected, (state, action) => {
-    //     handleRejected(state, action);
-    //   });
+  },
+  reducers: {
+    addReceivedMessage(state, { payload }) {
+      state.currentRoom.messages = [...state.currentRoom.messages, payload];
+    },
   },
 });
 
 // export const authReducer = persistReducer(authPersistConfig, authSlice.reducer);
+export const { addReceivedMessage } = roomSlice.actions;
 export const roomReducer = roomSlice.reducer;

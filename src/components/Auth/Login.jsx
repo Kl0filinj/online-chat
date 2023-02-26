@@ -28,12 +28,6 @@ const Login = () => {
     dispatch(login(authData));
   };
 
-  // const handleJoin = () => {
-  //   console.log(`Connection to room ${state.roomId}`);
-  //   socket.emit('joinRoom', state.roomId);
-  //   dispatch({ type: 'toggleShowChat', payload: true });
-  // };
-
   return (
     <Box>
       <Heading

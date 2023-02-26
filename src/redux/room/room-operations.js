@@ -40,3 +40,22 @@ export const getRoomById = createAsyncThunk(
     }
   }
 );
+
+export const addMessage = createAsyncThunk(
+  'rooms/addMessage',
+  async ({ text, room }, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.post(`/api/messages`, { text, room });
+
+      return data;
+    } catch ({ response }) {
+      //   errorToast('Something went wrong, try to reload the page');
+      const { status, data } = response;
+      const error = {
+        status,
+        message: data.message,
+      };
+      return rejectWithValue(error);
+    }
+  }
+);

@@ -5,10 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getAllRooms } from 'redux/room/room-operations';
 import { allRoomsSelector } from 'redux/room/room-selector';
+import socket from 'utils/socketConnection';
 
 const RoomsHub = () => {
   const dispatch = useDispatch();
   const rooms = useSelector(allRoomsSelector);
+
+  const handleJoin = roomId => {
+    console.log(`Connection to room ${roomId}`);
+    socket.emit('joinRoom', roomId);
+  };
+
   useEffect(() => {
     dispatch(getAllRooms());
   }, [dispatch]);
@@ -40,8 +47,8 @@ const RoomsHub = () => {
             >
               <Box>
                 <Heading fontSize={'2xl'}>{name}</Heading>
-                <Link as={NavLink} to={_id}>
-                  Chakra Design system <ExternalLinkIcon mx="2px" />
+                <Link as={NavLink} to={_id} onClick={() => handleJoin(_id)}>
+                  Get in room <ExternalLinkIcon mx="2px" />
                 </Link>
               </Box>
             </WrapItem>

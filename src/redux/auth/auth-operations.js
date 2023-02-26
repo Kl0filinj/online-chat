@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 // import { errorToast, successToast } from 'shared/components';
 import axios from 'axios';
 
-const BASE_URL = 'https://online-chat-server.onrender.com/';
+const BASE_URL = 'http://localhost:3030';
 // http://localhost:3030
 // https://online-chat-server.onrender.com/
 export const instance = axios.create({
@@ -58,7 +58,6 @@ export const getCurrentUser = createAsyncThunk(
     try {
       const { auth } = getState();
       const persistedToken = auth.token;
-      console.log(persistedToken);
 
       if (!persistedToken) {
         rejectWithValue('Unable to fetch user');
