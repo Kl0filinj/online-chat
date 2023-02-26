@@ -59,3 +59,26 @@ export const addMessage = createAsyncThunk(
     }
   }
 );
+
+// export const addUser = createAsyncThunk(
+//   'rooms/addUser',
+//   async ({ userName, userId, roomId }, { rejectWithValue }) => {
+//     try {
+//       const { data } = await instance.post(`/api/rooms/residents`, {
+//         userName,
+//         userId,
+//         roomId,
+//       });
+
+//       return data;
+//     } catch ({ response }) {
+//       //   errorToast('Something went wrong, try to reload the page');
+//       const { status, data } = response;
+//       const error = {
+//         status,
+//         message: data.message,
+//       };
+//       return rejectWithValue(error);
+//     }
+//   }
+// );

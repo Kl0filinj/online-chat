@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllRooms, getRoomById, addMessage } from './room-operations';
+import {
+  getAllRooms,
+  getRoomById,
+  addMessage,
+  // addUser,
+} from './room-operations';
 // import persistReducer from 'redux-persist/es/persistReducer';
 // import storage from 'redux-persist/lib/storage';
 // import {
@@ -60,7 +65,7 @@ const roomSlice = createSlice({
       })
 
       .addCase(addMessage.fulfilled, (state, { payload }) => {
-        console.log('ADD mESSGAE ');
+        console.log('ADD MESSGAE ');
         state.currentRoom.messages = [...state.currentRoom.messages, payload];
         state.isLoading = false;
         state.error = null;
@@ -68,14 +73,27 @@ const roomSlice = createSlice({
       .addCase(addMessage.rejected, (state, action) => {
         handleRejected(state, action);
       });
+
+    // .addCase(addUser.fulfilled, (state, { payload }) => {
+    //   console.log('ADD USER ');
+    //   state.currentRoom.residents = [payload, ...state.currentRoom.residents];
+    //   state.isLoading = false;
+    //   state.error = null;
+    // })
+    // .addCase(addUser.rejected, (state, action) => {
+    //   handleRejected(state, action);
+    // });
   },
   reducers: {
     addReceivedMessage(state, { payload }) {
       state.currentRoom.messages = [...state.currentRoom.messages, payload];
     },
+    // addactiveUser(state, { payload }) {
+    //   state.currentRoom.residents = [payload, ...state.currentRoom.residents];
+    // },
   },
 });
 
 // export const authReducer = persistReducer(authPersistConfig, authSlice.reducer);
-export const { addReceivedMessage } = roomSlice.actions;
+export const { addReceivedMessage, addactiveUser } = roomSlice.actions;
 export const roomReducer = roomSlice.reducer;

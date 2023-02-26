@@ -68,7 +68,6 @@ const authSlice = createSlice({
         handlePending(state);
       })
       .addCase(getCurrentUser.fulfilled, (state, { payload }) => {
-        console.log('current payload', payload);
         state.isRefreshing = false;
         state.isLoggedIn = true;
         state.user = payload;

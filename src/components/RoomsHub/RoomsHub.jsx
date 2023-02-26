@@ -3,18 +3,20 @@ import { Box, Heading, Wrap, Link, WrapItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+// import { userSelector } from 'redux/auth/auth-selector';
 import { getAllRooms } from 'redux/room/room-operations';
 import { allRoomsSelector } from 'redux/room/room-selector';
-import socket from 'utils/socketConnection';
+// import socket from 'utils/socketConnection';
 
 const RoomsHub = () => {
   const dispatch = useDispatch();
   const rooms = useSelector(allRoomsSelector);
+  // const { name, _id } = useSelector(userSelector);
 
-  const handleJoin = roomId => {
-    console.log(`Connection to room ${roomId}`);
-    socket.emit('joinRoom', roomId);
-  };
+  // const handleJoin = roomId => {
+  //   console.log(`Connection to room ${roomId}`);
+  //   socket.emit('joinRoom', { roomId, userName: name, userId: _id });
+  // };
 
   useEffect(() => {
     dispatch(getAllRooms());
@@ -41,13 +43,17 @@ const RoomsHub = () => {
             <WrapItem
               key={_id}
               margin={'10px !important'}
-              w={'200px'}
+              w={'44'}
               h={'100px'}
               className="gradient-border"
             >
               <Box>
                 <Heading fontSize={'2xl'}>{name}</Heading>
-                <Link as={NavLink} to={_id} onClick={() => handleJoin(_id)}>
+                <Link
+                  as={NavLink}
+                  to={_id}
+                  // onClick={() => handleJoin(_id)}
+                >
                   Get in room <ExternalLinkIcon mx="2px" />
                 </Link>
               </Box>
