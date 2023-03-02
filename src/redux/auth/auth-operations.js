@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 // import { errorToast, successToast } from 'shared/components';
 import axios from 'axios';
 
-const BASE_URL = 'https://online-chat-server.onrender.com';
-// http://localhost:3030
+const BASE_URL = 'http://localhost:1488';
+// http://localhost:1488
 // https://online-chat-server.onrender.com/
 export const instance = axios.create({
   baseURL: BASE_URL,

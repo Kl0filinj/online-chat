@@ -14,12 +14,12 @@ import {
 // } from './auth-operations';
 
 const handlePending = state => {
-  state.isRefreshing = true;
+  state.isLoading = true;
   state.error = null;
 };
 
 const handleRejected = (state, action) => {
-  state.isRefreshing = false;
+  state.isLoading = false;
   state.error = action.payload;
 };
 

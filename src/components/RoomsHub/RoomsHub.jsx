@@ -1,16 +1,18 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Box, Heading, Wrap, Link, WrapItem } from '@chakra-ui/react';
+import Loader from 'components/Loader/Loader';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 // import { userSelector } from 'redux/auth/auth-selector';
 import { getAllRooms } from 'redux/room/room-operations';
-import { allRoomsSelector } from 'redux/room/room-selector';
+import { allRoomsSelector, isLoadingSelector } from 'redux/room/room-selector';
 // import socket from 'utils/socketConnection';
 
 const RoomsHub = () => {
   const dispatch = useDispatch();
   const rooms = useSelector(allRoomsSelector);
+  const isLoading = useSelector(isLoadingSelector);
   // const { name, _id } = useSelector(userSelector);
 
   // const handleJoin = roomId => {
@@ -38,27 +40,33 @@ const RoomsHub = () => {
         mx={'auto'}
         my={'10'}
       >
-        <Wrap spacing={4}>
-          {rooms.map(({ name, _id }) => (
-            <WrapItem
-              key={_id}
-              margin={'10px !important'}
-              w={'44'}
-              h={'100px'}
-              className="gradient-border"
-            >
-              <Box>
-                <Heading fontSize={'2xl'}>{name}</Heading>
-                <Link
-                  as={NavLink}
-                  to={_id}
-                  // onClick={() => handleJoin(_id)}
+        <Wrap spacing={4} justify="center">
+          {!isLoading ? (
+            <>
+              {rooms.map(({ name, _id }) => (
+                <WrapItem
+                  key={_id}
+                  margin={'10px !important'}
+                  w={'44'}
+                  h={'100px'}
+                  className="gradient-border"
                 >
-                  Get in room <ExternalLinkIcon mx="2px" />
-                </Link>
-              </Box>
-            </WrapItem>
-          ))}
+                  <Box>
+                    <Heading fontSize={'2xl'}>{name}</Heading>
+                    <Link
+                      as={NavLink}
+                      to={_id}
+                      // onClick={() => handleJoin(_id)}
+                    >
+                      Get in room <ExternalLinkIcon mx="2px" />
+                    </Link>
+                  </Box>
+                </WrapItem>
+              ))}
+            </>
+          ) : (
+            <Loader />
+          )}
         </Wrap>
       </Box>
     </Box>

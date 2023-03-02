@@ -1,4 +1,13 @@
-import { Box, Button, Heading, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import Loader from 'components/Loader/Loader';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -9,7 +18,10 @@ import {
   // addUser,
   getRoomById,
 } from 'redux/room/room-operations';
-import { currentRoomSelector } from 'redux/room/room-selector';
+import {
+  currentRoomSelector,
+  isLoadingSelector,
+} from 'redux/room/room-selector';
 import {
   addReceivedMessage,
   // addactiveUser
@@ -21,10 +33,12 @@ const Chat = () => {
   const dispatch = useDispatch();
   const {
     messages,
+    name: roomName,
     // residents
   } = useSelector(currentRoomSelector);
   const { name, _id } = useSelector(userSelector);
   const { roomId } = useParams();
+  const isLoading = useSelector(isLoadingSelector);
   // const messageEndRef = useRef();
 
   // const getMessageTime = iso => {
@@ -37,10 +51,6 @@ const Chat = () => {
   const authorChecker = (validValue, invalidValue, messageAuthor) => {
     return messageAuthor === name ? validValue : invalidValue;
   };
-
-  // const scrollToBottom = () => {
-  //   messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // };
 
   // const handleDisconnect = () => {
   //   console.log(`Disconnection from room ${roomId}`);
@@ -83,9 +93,19 @@ const Chat = () => {
   return (
     <Box display={'flex'}>
       <Box flexBasis={'20%'}>
-        <Button>
+        <Button colorScheme={'purple'}>
           <Link to={'/rooms'}>Change Room</Link>
         </Button>
+        <Text>
+          Room:{' '}
+          <Text as={'b'} fontSize={'xl'}>
+            {roomName}
+          </Text>
+        </Text>
+        <Box w={'80%'} mx={'auto'} my={'3'}>
+          <Divider />
+        </Box>
+
         <Heading>Users:</Heading>
         <VStack>
           {/* {residents?.map(({ userName, userId }) => (
@@ -101,27 +121,39 @@ const Chat = () => {
         // bgColor={'gray.500'} maxH={'md'} overflowY={'scroll'}
         >
           <ScrollToBottom className="scrollToBotom">
-            {messages?.map(({ text, author, _id }) => (
-              <Box
-                key={_id}
-                maxW={'45%'}
-                w={'max-content'}
-                ml={authorChecker('auto', 'noen', author)}
-                p={'3'}
-              >
-                <Box textAlign={authorChecker('end', 'start', author)}>
-                  <Text fontSize={'xs'} as={'span'}>
-                    {`${author}`}
-                  </Text>
-                  {/* <Text fontSize={'xs'} as={'span'}>
+            {!isLoading ? (
+              <>
+                {messages?.length !== 0 ? (
+                  <>
+                    {messages?.map(({ text, author, _id }) => (
+                      <Box
+                        key={_id}
+                        maxW={'45%'}
+                        w={'max-content'}
+                        ml={authorChecker('auto', 'noen', author)}
+                        p={'3'}
+                      >
+                        <Box textAlign={authorChecker('end', 'start', author)}>
+                          <Text fontSize={'xs'} as={'span'}>
+                            {`${author}`}
+                          </Text>
+                          {/* <Text fontSize={'xs'} as={'span'}>
                   {getMessageTime(createdAt)}
                 </Text> */}
-                </Box>
-                <Box bgColor={'purple.600'} borderRadius={'sm'}>
-                  <Text p={'3'}>{text}</Text>
-                </Box>
-              </Box>
-            ))}
+                        </Box>
+                        <Box bgColor={'purple.600'} borderRadius={'sm'}>
+                          <Text p={'3'}>{text}</Text>
+                        </Box>
+                      </Box>
+                    ))}
+                  </>
+                ) : (
+                  <Heading>There is no messages, be the first one ^_^</Heading>
+                )}
+              </>
+            ) : (
+              <Loader />
+            )}
           </ScrollToBottom>
         </Box>
         <Box display={'flex'} overflowY={'scroll'}>
