@@ -3,11 +3,15 @@ import {
   Button,
   Divider,
   Heading,
+  IconButton,
   Input,
+  InputGroup,
+  InputRightElement,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import Loader from 'components/Loader/Loader';
+import { SendIcon } from 'components/sheared/customIcons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -36,6 +40,7 @@ const Chat = () => {
     name: roomName,
     // residents
   } = useSelector(currentRoomSelector);
+  // const forcedScrollToEnd = useScrollToBottom();
   const { name, _id } = useSelector(userSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
@@ -65,7 +70,7 @@ const Chat = () => {
     };
     await socket.emit('sendMessage', messageData);
     dispatch(addMessage(messageData));
-    // scrollToBottom();
+    // forcedScrollToEnd();
     setCurrentMessage('');
   };
 
@@ -82,7 +87,6 @@ const Chat = () => {
     socket.on('receiveMessage', data => {
       console.log('RECEIVE', data);
       dispatch(addReceivedMessage(data));
-      // scrollToBottom();
     });
     // socket.on('newUser', ({ userName, userId, roomId }) => {
     //   console.log('NEW_USER', userName);
@@ -128,7 +132,7 @@ const Chat = () => {
                     {messages?.map(({ text, author, _id }) => (
                       <Box
                         key={_id}
-                        maxW={'45%'}
+                        maxW={'50%'}
                         w={'max-content'}
                         ml={authorChecker('auto', 'noen', author)}
                         p={'3'}
@@ -141,8 +145,17 @@ const Chat = () => {
                   {getMessageTime(createdAt)}
                 </Text> */}
                         </Box>
-                        <Box bgColor={'purple.600'} borderRadius={'sm'}>
-                          <Text p={'3'}>{text}</Text>
+                        <Box
+                          bgColor={authorChecker(
+                            'purple.600',
+                            'green.600',
+                            author
+                          )}
+                          borderRadius={'sm'}
+                        >
+                          <Text p={'3'} lineHeight={'1.2'}>
+                            {text}
+                          </Text>
                         </Box>
                       </Box>
                     ))}
@@ -156,17 +169,37 @@ const Chat = () => {
             )}
           </ScrollToBottom>
         </Box>
-        <Box display={'flex'} overflowY={'scroll'}>
-          <Input
-            value={currentMessage}
-            onChange={evt => setCurrentMessage(evt.target.value)}
-          />
-          <Button
-            isDisabled={currentMessage === ''}
-            onClick={() => sendMessage(currentMessage)}
-          >
-            Send
-          </Button>
+        <Box display={'flex'} bgColor={'#222222'}>
+          <InputGroup size="md">
+            <Input
+              variant={'filled'}
+              borderRadius={'xl'}
+              value={currentMessage}
+              onChange={evt => setCurrentMessage(evt.target.value)}
+              placeholder="Enter message..."
+            />
+            <InputRightElement width="4.5rem">
+              <IconButton
+                aria-label="Send message"
+                icon={
+                  <SendIcon
+                    transitionProperty={'fill'}
+                    transitionDuration={'250ms'}
+                    transitionTimingFunction={'cubic-bezier(0.4, 0, 0.2, 1)'}
+                    _hover={{
+                      fill: 'purple.500',
+                    }}
+                  />
+                }
+                variant={'unstyled'}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                isDisabled={currentMessage === ''}
+                onClick={() => sendMessage(currentMessage)}
+              />
+            </InputRightElement>
+          </InputGroup>
         </Box>
       </Box>
     </Box>

@@ -9,7 +9,8 @@ const SharedLayout = () => {
   const isLoggedIn = useSelector(isLoggedInSelector);
   return (
     <Container
-      maxW="container.lg"
+      // maxW="container.lg"
+      maxW={{ base: 'container.xs', md: 'container.md', xl: 'container.lg' }}
       // bg="yellow.100"
       textAlign={'center'}
       as="main"
