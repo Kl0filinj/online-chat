@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 import Loader from 'components/Loader/Loader';
-import { SendIcon } from 'components/sheared/customIcons';
+import { EmojiIcon, SendIcon } from 'components/sheared/customIcons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -25,10 +25,12 @@ import {
 import { addReceivedMessage } from 'redux/room/room-slice';
 import socket from 'utils/socketConnection';
 import Message from './Message';
+import EmojiPicker from 'emoji-picker-react';
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [typingResponse, setTypingResponse] = useState('');
+  const [isEmojiBarOpen, setIsEmojiBarOpen] = useState(false);
   const dispatch = useDispatch();
   const {
     messages,
@@ -45,6 +47,8 @@ const Chat = () => {
   //   const minute = dateObj.getUTCMinutes();
   //   return `${hour}:${minute}`;
   // };
+  const onEmojiClick = ({ emoji }) =>
+    setCurrentMessage(`${currentMessage} ${emoji}`);
 
   const authorChecker = (validValue, invalidValue, messageAuthor) => {
     return messageAuthor === name ? validValue : invalidValue;
@@ -156,27 +160,65 @@ const Chat = () => {
               }}
               placeholder="Enter message..."
             />
-            <InputRightElement width="4.5rem">
-              <IconButton
-                aria-label="Send message"
-                icon={
-                  <SendIcon
-                    transitionProperty={'fill'}
-                    transitionDuration={'250ms'}
-                    transitionTimingFunction={'cubic-bezier(0.4, 0, 0.2, 1)'}
-                    _hover={{
-                      fill: 'purple.500',
-                    }}
+
+            <InputRightElement
+              width="4.5rem"
+              pr={'16'}
+              children={
+                <>
+                  <IconButton
+                    aria-label="Send message"
+                    icon={
+                      <SendIcon
+                        transitionProperty={'fill'}
+                        transitionDuration={'250ms'}
+                        transitionTimingFunction={
+                          'cubic-bezier(0.4, 0, 0.2, 1)'
+                        }
+                        _hover={{
+                          fill: 'purple.500',
+                        }}
+                      />
+                    }
+                    variant={'unstyled'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    isDisabled={currentMessage === ''}
+                    onClick={() => sendMessage(currentMessage)}
                   />
-                }
-                variant={'unstyled'}
-                display={'flex'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                isDisabled={currentMessage === ''}
-                onClick={() => sendMessage(currentMessage)}
-              />
-            </InputRightElement>
+                  <IconButton
+                    aria-label="Pick emoji"
+                    icon={
+                      <EmojiIcon
+                        transitionProperty={'fill'}
+                        transitionDuration={'250ms'}
+                        transitionTimingFunction={
+                          'cubic-bezier(0.4, 0, 0.2, 1)'
+                        }
+                        _hover={{
+                          fill: 'purple.500',
+                        }}
+                      />
+                    }
+                    variant={'unstyled'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    onClick={() => setIsEmojiBarOpen(!isEmojiBarOpen)}
+                  />
+                </>
+              }
+            />
+            {isEmojiBarOpen && (
+              <Box position={'absolute'} right={'0'} bottom={'100%'}>
+                <EmojiPicker
+                  onEmojiClick={onEmojiClick}
+                  lazyLoadEmojis={true}
+                  searchDisabled={true}
+                />
+              </Box>
+            )}
           </InputGroup>
         </Box>
       </Box>
