@@ -10,12 +10,14 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 import Loader from 'components/Loader/Loader';
 import { SendIcon } from 'components/sheared/customIcons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import { PulseLoader } from 'react-spinners';
 import { userSelector } from 'redux/auth/auth-selector';
 import {
   addMessage,
@@ -31,20 +33,20 @@ import {
   // addactiveUser
 } from 'redux/room/room-slice';
 import socket from 'utils/socketConnection';
+import Message from './Message';
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState('');
+  const [typingResponse, setTypingResponse] = useState('');
   const dispatch = useDispatch();
   const {
     messages,
     name: roomName,
     // residents
   } = useSelector(currentRoomSelector);
-  // const forcedScrollToEnd = useScrollToBottom();
   const { name, _id } = useSelector(userSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
-  // const messageEndRef = useRef();
 
   // const getMessageTime = iso => {
   //   const dateObj = new Date(iso);
@@ -55,6 +57,14 @@ const Chat = () => {
 
   const authorChecker = (validValue, invalidValue, messageAuthor) => {
     return messageAuthor === name ? validValue : invalidValue;
+  };
+
+  const handleTyping = () => {
+    console.log('typing');
+    socket.emit('startTyping', {
+      roomId,
+      typingUserMessage: `${name} is typing`,
+    });
   };
 
   // const handleDisconnect = () => {
@@ -68,9 +78,12 @@ const Chat = () => {
       text: currentMessage.trim(),
       author: name,
     };
-    await socket.emit('sendMessage', messageData);
+    await socket.emit('sendMessage', { ...messageData, _id: uuidv4() });
     dispatch(addMessage(messageData));
-    // forcedScrollToEnd();
+    socket.emit('stopTyping', {
+      roomId,
+      typingUserMessage: `stop`,
+    });
     setCurrentMessage('');
   };
 
@@ -88,11 +101,20 @@ const Chat = () => {
       console.log('RECEIVE', data);
       dispatch(addReceivedMessage(data));
     });
+
+    socket.on('typingResponse', data =>
+      data === 'stop' ? setTypingResponse('') : setTypingResponse(data)
+    );
+
     // socket.on('newUser', ({ userName, userId, roomId }) => {
     //   console.log('NEW_USER', userName);
     //   dispatch(addactiveUser({ userName, userId, roomId }));
     // });
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   socket.on('typingResponse', data => setTypingResponse(data));
+  // }, [socket]);
 
   return (
     <Box display={'flex'}>
@@ -130,35 +152,23 @@ const Chat = () => {
                 {messages?.length !== 0 ? (
                   <>
                     {messages?.map(({ text, author, _id }) => (
-                      <Box
+                      <Message
                         key={_id}
-                        maxW={'50%'}
-                        w={'max-content'}
-                        ml={authorChecker('auto', 'noen', author)}
-                        p={'3'}
-                      >
-                        <Box textAlign={authorChecker('end', 'start', author)}>
-                          <Text fontSize={'xs'} as={'span'}>
-                            {`${author}`}
-                          </Text>
-                          {/* <Text fontSize={'xs'} as={'span'}>
-                  {getMessageTime(createdAt)}
-                </Text> */}
-                        </Box>
-                        <Box
-                          bgColor={authorChecker(
-                            'purple.600',
-                            'green.600',
-                            author
-                          )}
-                          borderRadius={'sm'}
-                        >
-                          <Text p={'3'} lineHeight={'1.2'}>
-                            {text}
+                        text={text}
+                        author={author}
+                        authorChecker={authorChecker}
+                      />
+                    ))}
+                    {typingResponse !== '' && (
+                      <Box maxW={'50%'} w={'max-content'} ml={'none'} p={'4'}>
+                        <Box bgColor={'gray.600'} borderRadius={'sm'}>
+                          <Text p={'3'} lineHeight={'1.2'} as={'span'}>
+                            {typingResponse}{' '}
+                            <PulseLoader color="#805AD5" size="9px" />
                           </Text>
                         </Box>
                       </Box>
-                    ))}
+                    )}
                   </>
                 ) : (
                   <Heading>There is no messages, be the first one ^_^</Heading>
@@ -175,7 +185,10 @@ const Chat = () => {
               variant={'filled'}
               borderRadius={'xl'}
               value={currentMessage}
-              onChange={evt => setCurrentMessage(evt.target.value)}
+              onChange={evt => {
+                setCurrentMessage(evt.target.value);
+                handleTyping();
+              }}
               placeholder="Enter message..."
             />
             <InputRightElement width="4.5rem">
