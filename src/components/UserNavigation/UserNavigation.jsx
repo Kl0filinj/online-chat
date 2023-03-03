@@ -2,15 +2,18 @@ import { Text, Box, IconButton } from '@chakra-ui/react';
 import { ExitIcon } from 'components/sheared/customIcons';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { logout } from 'redux/auth/auth-operations';
 import { userSelector } from 'redux/auth/auth-selector';
 
 const UserNavigation = () => {
   const { name } = useSelector(userSelector);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     dispatch(logout());
+    navigate('/');
   };
   return (
     <Box bgColor={'red'} display={'flex'} justifyContent={'end'}>

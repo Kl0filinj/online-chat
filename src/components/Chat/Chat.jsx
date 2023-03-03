@@ -1,14 +1,12 @@
 import {
   Box,
   Button,
-  Divider,
   Heading,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
   Text,
-  VStack,
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 import Loader from 'components/Loader/Loader';
@@ -19,19 +17,12 @@ import { Link, useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { PulseLoader } from 'react-spinners';
 import { userSelector } from 'redux/auth/auth-selector';
-import {
-  addMessage,
-  // addUser,
-  getRoomById,
-} from 'redux/room/room-operations';
+import { addMessage, getRoomById } from 'redux/room/room-operations';
 import {
   currentRoomSelector,
   isLoadingSelector,
 } from 'redux/room/room-selector';
-import {
-  addReceivedMessage,
-  // addactiveUser
-} from 'redux/room/room-slice';
+import { addReceivedMessage } from 'redux/room/room-slice';
 import socket from 'utils/socketConnection';
 import Message from './Message';
 
@@ -44,7 +35,7 @@ const Chat = () => {
     name: roomName,
     // residents
   } = useSelector(currentRoomSelector);
-  const { name, _id } = useSelector(userSelector);
+  const { name } = useSelector(userSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
 
@@ -60,41 +51,30 @@ const Chat = () => {
   };
 
   const handleTyping = () => {
-    console.log('typing');
     socket.emit('startTyping', {
       roomId,
       typingUserMessage: `${name} is typing`,
     });
   };
 
-  // const handleDisconnect = () => {
-  //   console.log(`Disconnection from room ${roomId}`);
-  //   socket.emit('disconnect', roomId);
-  // };
-
-  const sendMessage = async () => {
+  const sendMessage = () => {
     const messageData = {
       room: roomId,
       text: currentMessage.trim(),
       author: name,
     };
-    await socket.emit('sendMessage', { ...messageData, _id: uuidv4() });
+    socket.emit('sendMessage', { ...messageData, _id: uuidv4() });
     dispatch(addMessage(messageData));
     socket.emit('stopTyping', {
       roomId,
-      typingUserMessage: `stop`,
+      typingUserMessage: 'stop',
     });
     setCurrentMessage('');
   };
 
   useEffect(() => {
-    console.log(`Connection to room ${roomId}`);
-    socket.emit('joinRoom', { roomId, userName: name, userId: _id });
     dispatch(getRoomById(roomId));
-    //   .then(() =>
-    //   dispatch(addUser({ userName: name, userId: _id, roomId }))
-    // );
-  }, [dispatch, roomId, _id, name]);
+  }, [dispatch, roomId]);
 
   useEffect(() => {
     socket.on('receiveMessage', data => {
@@ -105,47 +85,32 @@ const Chat = () => {
     socket.on('typingResponse', data =>
       data === 'stop' ? setTypingResponse('') : setTypingResponse(data)
     );
-
-    // socket.on('newUser', ({ userName, userId, roomId }) => {
-    //   console.log('NEW_USER', userName);
-    //   dispatch(addactiveUser({ userName, userId, roomId }));
-    // });
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   socket.on('typingResponse', data => setTypingResponse(data));
-  // }, [socket]);
-
   return (
-    <Box display={'flex'}>
-      <Box flexBasis={'20%'}>
-        <Button colorScheme={'purple'}>
-          <Link to={'/rooms'}>Change Room</Link>
-        </Button>
+    <Box>
+      <Box
+        display={'flex'}
+        justifyContent={'space-between'}
+        px={'10'}
+        py={'3'}
+        bgColor={'#222222'}
+        borderBottom={'4px'}
+        borderColor={'purple.700'}
+      >
         <Text>
           Room:{' '}
           <Text as={'b'} fontSize={'xl'}>
             {roomName}
           </Text>
         </Text>
-        <Box w={'80%'} mx={'auto'} my={'3'}>
-          <Divider />
-        </Box>
-
-        <Heading>Users:</Heading>
-        <VStack>
-          {/* {residents?.map(({ userName, userId }) => (
-            <Box key={userId}>
-              <Text>{userName}</Text>
-            </Box>
-          ))} */}
-        </VStack>
+        <Button colorScheme={'purple'}>
+          <Link to={'/rooms'}>Change Room</Link>
+        </Button>
       </Box>
 
-      <Box flexBasis={'80%'}>
-        <Box
-        // bgColor={'gray.500'} maxH={'md'} overflowY={'scroll'}
-        >
+      <Box>
+        <Box>
           <ScrollToBottom className="scrollToBotom">
             {!isLoading ? (
               <>
