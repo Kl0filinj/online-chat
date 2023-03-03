@@ -61,6 +61,11 @@ const Chat = () => {
     });
   };
 
+  const handleDisconnect = () => {
+    socket.emit('leaveRoom', { roomId });
+    console.log('USER LEFT ROOM');
+  };
+
   const sendMessage = () => {
     const messageData = {
       room: roomId,
@@ -79,6 +84,12 @@ const Chat = () => {
   useEffect(() => {
     dispatch(getRoomById(roomId));
   }, [dispatch, roomId]);
+
+  useEffect(() => {
+    socket.on('newUser', data => {
+      console.log('NEW USER CONNECTED', data);
+    });
+  }, []);
 
   useEffect(() => {
     socket.on('receiveMessage', data => {
@@ -108,7 +119,7 @@ const Chat = () => {
             {roomName}
           </Text>
         </Text>
-        <Button colorScheme={'purple'}>
+        <Button colorScheme={'purple'} onClick={handleDisconnect}>
           <Link to={'/rooms'}>Change Room</Link>
         </Button>
       </Box>
