@@ -1,5 +1,4 @@
 import Login from './Auth/Login';
-// import socket from 'utils/socketConnection';
 import RoomsHub from './RoomsHub/RoomsHub';
 import Register from './Auth/Register';
 import SharedLayout from './sheared/SharedLayout';

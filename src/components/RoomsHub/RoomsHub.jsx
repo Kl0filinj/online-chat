@@ -5,11 +5,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { userSelector } from 'redux/auth/auth-selector';
-// import { userSelector } from 'redux/auth/auth-selector';
 import { getAllRooms } from 'redux/room/room-operations';
 import { allRoomsSelector, isLoadingSelector } from 'redux/room/room-selector';
 import socket from 'utils/socketConnection';
-// import socket from 'utils/socketConnection';
 
 const RoomsHub = () => {
   const dispatch = useDispatch();

@@ -8,97 +8,50 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import Loader from 'components/Loader/Loader';
 import { EmojiIcon, SendIcon } from 'components/sheared/customIcons';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { PulseLoader } from 'react-spinners';
-import { userSelector } from 'redux/auth/auth-selector';
-import { addMessage, getRoomById } from 'redux/room/room-operations';
 import {
   currentRoomSelector,
   isLoadingSelector,
 } from 'redux/room/room-selector';
-import { addReceivedMessage } from 'redux/room/room-slice';
-import socket from 'utils/socketConnection';
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
-import infoToast from 'components/sheared/Toasts/infoToast';
+import useChat from 'hooks/useChat';
 // import warningToast from 'components/sheared/Toasts/warningToast';
 
 const Chat = () => {
-  const [currentMessage, setCurrentMessage] = useState('');
-  const [typingResponse, setTypingResponse] = useState('');
   const [isEmojiBarOpen, setIsEmojiBarOpen] = useState(false);
-  const dispatch = useDispatch();
   const { messages, name: roomName } = useSelector(currentRoomSelector);
-  const { name } = useSelector(userSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
-
+  const {
+    currentMessage,
+    typingResponse,
+    sendMessage,
+    onEmojiClick,
+    authorChecker,
+    onMessageTyping,
+  } = useChat(roomId);
   // const getMessageTime = iso => {
   //   const dateObj = new Date(iso);
   //   const hour = dateObj.getUTCHours();
   //   const minute = dateObj.getUTCMinutes();
   //   return `${hour}:${minute}`;
   // };
-  const onEmojiClick = ({ emoji }) =>
-    setCurrentMessage(`${currentMessage} ${emoji}`);
-
-  const authorChecker = (validValue, invalidValue, messageAuthor) => {
-    return messageAuthor === name ? validValue : invalidValue;
-  };
-
-  const handleTyping = () => {
-    socket.emit('startTyping', {
-      roomId,
-      typingUserMessage: `${name} is typing`,
-    });
-  };
 
   const handleDisconnect = () => {
     // warningToast(`User ${name} left the chat !`, {
     //   autoClose: 30000,
     // });
-    socket.emit('leaveRoom', { roomId });
+    // socket.emit('leaveRoom', roomId);
     console.log('USER LEFT ROOM');
   };
-
-  const sendMessage = () => {
-    const messageData = {
-      room: roomId,
-      text: currentMessage.trim(),
-      author: name,
-    };
-    socket.emit('sendMessage', { ...messageData, _id: uuidv4() });
-    dispatch(addMessage(messageData));
-    socket.emit('stopTyping', {
-      roomId,
-      typingUserMessage: 'stop',
-    });
-    setCurrentMessage('');
-  };
-
-  useEffect(() => {
-    dispatch(getRoomById(roomId));
-
-    socket.on('newUser', data => {
-      console.log('NEW USER CONNECTED', data);
-      infoToast(`User ${data.userName} joined to chat !`, { autoClose: 30000 });
-    });
-
-    socket.on('receiveMessage', data => {
-      console.log('RECEIVE', data);
-      dispatch(addReceivedMessage(data));
-    });
-
-    socket.on('typingResponse', data =>
-      data === 'stop' ? setTypingResponse('') : setTypingResponse(data)
-    );
-  }, [dispatch, roomId]);
 
   return (
     <Box>
@@ -163,10 +116,7 @@ const Chat = () => {
               variant={'filled'}
               borderRadius={'xl'}
               value={currentMessage}
-              onChange={evt => {
-                setCurrentMessage(evt.target.value);
-                handleTyping();
-              }}
+              onChange={evt => onMessageTyping(evt.target.value)}
               placeholder="Enter message..."
             />
 

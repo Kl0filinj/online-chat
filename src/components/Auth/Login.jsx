@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { login } from 'redux/auth/auth-operations';
 import { isRefreshingSelector } from 'redux/auth/auth-selector';
-// import socket from 'utils/socketConnection';
 import { loginYupSchema } from 'utils/validationSchemas/validationSchemas';
 
 const Login = () => {

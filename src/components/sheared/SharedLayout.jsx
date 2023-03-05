@@ -1,9 +1,8 @@
 import { Container } from '@chakra-ui/react';
-import UserNavigation from 'components/UserNavigation/UserNavigation';
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { isLoggedInSelector } from 'redux/auth/auth-selector';
+import UserNavigation from 'components/UserNavigation/UserNavigation';
 
 const SharedLayout = () => {
   const isLoggedIn = useSelector(isLoggedInSelector);
