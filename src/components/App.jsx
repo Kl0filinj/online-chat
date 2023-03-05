@@ -1,17 +1,18 @@
 import Login from './Auth/Login';
 // import socket from 'utils/socketConnection';
-import { Route, Routes } from 'react-router-dom';
-import { RedirectedRoute } from './SecureRoutes/RedirectedRoute';
-import { PrivateRoute } from './SecureRoutes/PrivateRoute';
-
 import RoomsHub from './RoomsHub/RoomsHub';
 import Register from './Auth/Register';
 import SharedLayout from './sheared/SharedLayout';
+import Chat from './Chat/Chat';
+import { Route, Routes } from 'react-router-dom';
+import { RedirectedRoute } from './SecureRoutes/RedirectedRoute';
+import { PrivateRoute } from './SecureRoutes/PrivateRoute';
+import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser } from 'redux/auth/auth-operations';
 import { isRefreshingSelector } from 'redux/auth/auth-selector';
-import Chat from './Chat/Chat';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -51,6 +52,18 @@ export const App = () => {
           </Route>
         </Routes>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };

@@ -1,17 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import persistReducer from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
-import {
-  register,
-  login,
-  getCurrentUser,
-  logout,
-  // getCurrentUser,
-  // updateUserAvatar,
-  // updateUser,
-  // addNewPet,
-  // deletePet,
-} from './auth-operations';
+import { register, login, getCurrentUser, logout } from './auth-operations';
 
 const handlePending = state => {
   state.isRefreshing = true;
@@ -55,7 +45,6 @@ const authSlice = createSlice({
         handlePending(state);
       })
       .addCase(login.fulfilled, (state, { payload }) => {
-        console.log('login payload', payload);
         state.isRefreshing = false;
         state.user = payload;
         state.token = payload.token;
@@ -91,4 +80,3 @@ const authSlice = createSlice({
 });
 
 export const authReducer = persistReducer(authPersistConfig, authSlice.reducer);
-// export const authReducer = authSlice.reducer;

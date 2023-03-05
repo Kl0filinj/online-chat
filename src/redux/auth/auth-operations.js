@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 // import { errorToast, successToast } from 'shared/components';
 import axios from 'axios';
+import errorToast from 'components/sheared/Toasts/errorToast';
 
 const BASE_URL = 'https://online-chat-server.onrender.com';
 // http://localhost:1488
@@ -23,13 +24,13 @@ export const register = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const { data } = await instance.post('/api/users/register', credentials);
-
       return data;
     } catch ({ response }) {
       const error = {
         status: response.status,
         message: response.data.message,
       };
+      errorToast(response.data.message);
       return rejectWithValue(error);
     }
   }
@@ -47,6 +48,7 @@ export const login = createAsyncThunk(
         status: response.status,
         message: response.data.message,
       };
+      errorToast(response.data.message);
       return rejectWithValue(error);
     }
   }
@@ -70,6 +72,7 @@ export const getCurrentUser = createAsyncThunk(
         status: response.status,
         message: response.data.message,
       };
+      errorToast(response.data.message);
       return rejectWithValue(error);
     }
   }
@@ -83,11 +86,11 @@ export const logout = createAsyncThunk(
       token.unset();
       return data;
     } catch ({ response }) {
-      // errorToast('Something went wrong, try to reload the page');
       const error = {
         status: response.status,
         message: response.data.message,
       };
+      errorToast(response.data.message);
       return rejectWithValue(error);
     }
   }
