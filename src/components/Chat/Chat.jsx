@@ -23,6 +23,7 @@ import {
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
 import useChat from 'hooks/useChat';
+// import socket from 'utils/socketConnection';
 // import warningToast from 'components/sheared/Toasts/warningToast';
 
 const Chat = () => {

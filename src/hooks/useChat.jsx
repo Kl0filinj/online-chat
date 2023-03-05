@@ -4,13 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from 'redux/auth/auth-selector';
 import { addMessage, getRoomById } from 'redux/room/room-operations';
 import { addReceivedMessage } from 'redux/room/room-slice';
-// import useSocket from 'utils/socketConnection';
 import { v4 as uuidv4 } from 'uuid';
 import socket from 'utils/socketConnection';
 
 const useChat = roomId => {
-  //   const socket = useSocket();
-  //   console.log(socket.current);
   const [currentMessage, setCurrentMessage] = useState('');
   const [typingResponse, setTypingResponse] = useState('');
   const { name } = useSelector(userSelector);
@@ -32,9 +29,10 @@ const useChat = roomId => {
       dispatch(addReceivedMessage(data));
     });
 
-    socket.on('typingResponse', data =>
-      data === 'stop' ? setTypingResponse('') : setTypingResponse(data)
-    );
+    socket.on('typingResponse', data => {
+      console.log('TYPING RESP');
+      data === 'stop' ? setTypingResponse('') : setTypingResponse(data);
+    });
     return () => {
       console.log('DISCONNECT');
       socket.emit('leaveRoom', roomId);

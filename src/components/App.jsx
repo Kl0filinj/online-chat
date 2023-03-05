@@ -21,8 +21,8 @@ export const App = () => {
   }, [dispatch]);
 
   return (
-    <>
-      {!isLoading && (
+    !isLoading && (
+      <>
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             {/* <Route index element={<Home />} /> */}
@@ -50,19 +50,20 @@ export const App = () => {
             <Route path="*" element={<h1>Page Not Found 🥶</h1>} />
           </Route>
         </Routes>
-      )}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-    </>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </>
+    )
   );
 };
