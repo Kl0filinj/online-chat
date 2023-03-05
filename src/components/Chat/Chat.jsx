@@ -26,17 +26,15 @@ import { addReceivedMessage } from 'redux/room/room-slice';
 import socket from 'utils/socketConnection';
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
+import infoToast from 'components/sheared/Toasts/infoToast';
+// import warningToast from 'components/sheared/Toasts/warningToast';
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [typingResponse, setTypingResponse] = useState('');
   const [isEmojiBarOpen, setIsEmojiBarOpen] = useState(false);
   const dispatch = useDispatch();
-  const {
-    messages,
-    name: roomName,
-    // residents
-  } = useSelector(currentRoomSelector);
+  const { messages, name: roomName } = useSelector(currentRoomSelector);
   const { name } = useSelector(userSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
@@ -62,6 +60,9 @@ const Chat = () => {
   };
 
   const handleDisconnect = () => {
+    // warningToast(`User ${name} left the chat !`, {
+    //   autoClose: 30000,
+    // });
     socket.emit('leaveRoom', { roomId });
     console.log('USER LEFT ROOM');
   };
@@ -83,15 +84,12 @@ const Chat = () => {
 
   useEffect(() => {
     dispatch(getRoomById(roomId));
-  }, [dispatch, roomId]);
 
-  useEffect(() => {
     socket.on('newUser', data => {
       console.log('NEW USER CONNECTED', data);
+      infoToast(`User ${data.userName} joined to chat !`, { autoClose: 30000 });
     });
-  }, []);
 
-  useEffect(() => {
     socket.on('receiveMessage', data => {
       console.log('RECEIVE', data);
       dispatch(addReceivedMessage(data));
@@ -100,7 +98,7 @@ const Chat = () => {
     socket.on('typingResponse', data =>
       data === 'stop' ? setTypingResponse('') : setTypingResponse(data)
     );
-  }, [dispatch]);
+  }, [dispatch, roomId]);
 
   return (
     <Box>
