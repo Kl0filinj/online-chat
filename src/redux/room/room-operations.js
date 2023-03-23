@@ -54,3 +54,40 @@ export const addMessage = createAsyncThunk(
     }
   }
 );
+
+export const addNewUser = createAsyncThunk(
+  'rooms/addNewUser',
+  async (roomId, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.post(`/api/rooms/residents`, { roomId });
+
+      return data;
+    } catch ({ response }) {
+      const { status, data } = response;
+      const error = {
+        status,
+        message: data.message,
+      };
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const removeNewUser = createAsyncThunk(
+  'rooms/removeNewUser',
+  async (roomId, { rejectWithValue }) => {
+    try {
+      console.log(roomId);
+      const { data } = await instance.delete(`/api/rooms/residents/${roomId}`);
+
+      return data;
+    } catch ({ response }) {
+      const { status, data } = response;
+      const error = {
+        status,
+        message: data.message,
+      };
+      return rejectWithValue(error);
+    }
+  }
+);

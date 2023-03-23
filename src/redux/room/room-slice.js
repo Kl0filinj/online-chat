@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllRooms, getRoomById, addMessage } from './room-operations';
+import {
+  getAllRooms,
+  getRoomById,
+  addMessage,
+  addNewUser,
+  removeNewUser,
+} from './room-operations';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -57,14 +63,47 @@ const roomSlice = createSlice({
       })
       .addCase(addMessage.rejected, (state, action) => {
         handleRejected(state, action);
+      })
+
+      .addCase(addNewUser.fulfilled, (state, { payload }) => {
+        console.log('ADD USER ');
+        state.currentRoom.residents = [...state.currentRoom.residents, payload];
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(addNewUser.rejected, (state, action) => {
+        handleRejected(state, action);
+      })
+
+      .addCase(removeNewUser.fulfilled, (state, { payload }) => {
+        console.log('REMOVE USER ');
+        const index = state.currentRoom.residents.findIndex(
+          item => item._id === payload._id
+        );
+        state.currentRoom.residents.splice(index, 1);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(removeNewUser.rejected, (state, action) => {
+        handleRejected(state, action);
       });
   },
   reducers: {
     addReceivedMessage(state, { payload }) {
       state.currentRoom.messages = [...state.currentRoom.messages, payload];
     },
+    addNewReceivedUser(state, { payload }) {
+      state.currentRoom.residents = [...state.currentRoom.residents, payload];
+    },
+    removeNewReceivedUser(state, { payload }) {
+      const index = state.currentRoom.residents.findIndex(
+        item => item._id === payload._id
+      );
+      state.currentRoom.residents.splice(index, 1);
+    },
   },
 });
 
-export const { addReceivedMessage, addactiveUser } = roomSlice.actions;
+export const { addReceivedMessage, addNewReceivedUser, removeNewReceivedUser } =
+  roomSlice.actions;
 export const roomReducer = roomSlice.reducer;

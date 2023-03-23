@@ -7,12 +7,14 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import Loader from 'components/Loader/Loader';
 import { EmojiIcon, SendIcon } from 'components/sheared/customIcons';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { PulseLoader } from 'react-spinners';
 import {
@@ -22,11 +24,14 @@ import {
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
 import useChat from 'hooks/useChat';
-import socket from 'utils/socketConnection';
 
 const Chat = () => {
   const [isEmojiBarOpen, setIsEmojiBarOpen] = useState(false);
-  const { messages, name: roomName } = useSelector(currentRoomSelector);
+  const {
+    messages,
+    name: roomName,
+    residents,
+  } = useSelector(currentRoomSelector);
   const { roomId } = useParams();
   const isLoading = useSelector(isLoadingSelector);
   const {
@@ -36,12 +41,8 @@ const Chat = () => {
     onEmojiClick,
     authorChecker,
     onMessageTyping,
+    handleDisconnect,
   } = useChat(roomId);
-
-  const handleDisconnect = () => {
-    console.log('USER LEFT ROOM');
-    socket.emit('leaveRoom', roomId);
-  };
 
   return (
     <Box>
@@ -60,14 +61,35 @@ const Chat = () => {
             {roomName}
           </Text>
         </Text>
-        <Text>
+        <Box maxW={'30%'}>
           Users Online:
-          <Text as={'b'} fontSize={'2xl'} color={'purple.400'}>
-            999
-          </Text>
-        </Text>
+          <Wrap spacing={5}>
+            {residents?.map(({ _id, name }) => (
+              <WrapItem key={_id}>
+                <Text
+                  display={'flex'}
+                  alignItems={'center'}
+                  fontWeight={'bold'}
+                  fontSize={'2xl'}
+                  color={'purple.400'}
+                  _before={{
+                    content: '""',
+                    display: 'inline-block',
+                    w: '10px',
+                    h: '10px',
+                    mr: '5px',
+                    borderRadius: '50%',
+                    bgColor: 'whatsapp.500',
+                  }}
+                >
+                  {name}
+                </Text>
+              </WrapItem>
+            ))}
+          </Wrap>
+        </Box>
         <Button colorScheme={'purple'} onClick={handleDisconnect}>
-          <Link to={'/rooms'}>Change Room</Link>
+          Change Room
         </Button>
       </Box>
 
