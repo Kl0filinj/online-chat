@@ -1,7 +1,14 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
 
-const Message = ({ text, author, authorChecker }) => {
+const Message = ({ text, author, authorChecker, createdAt }) => {
+  const convertDate = date => {
+    const isoDate = new Date(date);
+    const hours = String(isoDate.getHours()).padStart(2, '0');
+    const minutes = String(isoDate.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <Box
       maxW={'50%'}
@@ -22,6 +29,11 @@ const Message = ({ text, author, authorChecker }) => {
         <Text p={'3'} lineHeight={'1.2'}>
           {text}
         </Text>
+        <Box textAlign={'end'}>
+          <Text fontSize={'xs'} as={'span'} px={'1'} color={'gray.300'}>
+            {convertDate(createdAt)}
+          </Text>
+        </Box>
       </Box>
     </Box>
   );

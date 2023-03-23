@@ -1,7 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { instance } from 'redux/auth/auth-operations';
-// import { errorToast, successToast } from 'shared/components';
-// instance
 
 export const getAllRooms = createAsyncThunk(
   'rooms/getAllRooms',
@@ -11,7 +9,6 @@ export const getAllRooms = createAsyncThunk(
 
       return data;
     } catch ({ response }) {
-      //   errorToast('Something went wrong, try to reload the page');
       const { status, data } = response;
       const error = {
         status,
@@ -30,7 +27,6 @@ export const getRoomById = createAsyncThunk(
 
       return data;
     } catch ({ response }) {
-      //   errorToast('Something went wrong, try to reload the page');
       const { status, data } = response;
       const error = {
         status,
@@ -49,7 +45,6 @@ export const addMessage = createAsyncThunk(
 
       return data;
     } catch ({ response }) {
-      //   errorToast('Something went wrong, try to reload the page');
       const { status, data } = response;
       const error = {
         status,
@@ -59,26 +54,3 @@ export const addMessage = createAsyncThunk(
     }
   }
 );
-
-// export const addUser = createAsyncThunk(
-//   'rooms/addUser',
-//   async ({ userName, userId, roomId }, { rejectWithValue }) => {
-//     try {
-//       const { data } = await instance.post(`/api/rooms/residents`, {
-//         userName,
-//         userId,
-//         roomId,
-//       });
-
-//       return data;
-//     } catch ({ response }) {
-//       //   errorToast('Something went wrong, try to reload the page');
-//       const { status, data } = response;
-//       const error = {
-//         status,
-//         message: data.message,
-//       };
-//       return rejectWithValue(error);
-//     }
-//   }
-// );

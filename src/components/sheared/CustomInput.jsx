@@ -38,7 +38,6 @@ const CustomInput = ({
               fontSize={{ base: '18px', md: '2xl' }}
               fontWeight={'medium'}
               lineHeight={'1.44'}
-              // color={'black'}
               mb={2}
               mr="0"
             >

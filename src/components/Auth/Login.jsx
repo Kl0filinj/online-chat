@@ -46,7 +46,6 @@ const Login = () => {
         {formik => (
           <Box
             as={Form}
-            // position="relative"
             width={{ base: '280px', md: '448px', xl: '458px' }}
             mx={'auto'}
             my={'10'}

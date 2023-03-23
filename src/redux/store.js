@@ -10,14 +10,9 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-// import { noticesReducer } from './notices/notices-slice';
-// import filterReduser from './filter/filter-slice';
-// import { partnersReducer } from './partners/partners-slice';
 
 export const store = configureStore({
   reducer: {
-    // notices: noticesReducer,
-    // filter: filterReduser,
     room: roomReducer,
     auth: authReducer,
   },

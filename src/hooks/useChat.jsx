@@ -35,7 +35,6 @@ const useChat = roomId => {
     });
     return () => {
       console.log('DISCONNECT');
-      socket.emit('leaveRoom', roomId);
     };
   }, [dispatch, roomId]);
 
@@ -45,7 +44,11 @@ const useChat = roomId => {
       text: currentMessage.trim(),
       author: name,
     };
-    socket.emit('sendMessage', { ...messageData, _id: uuidv4() });
+    socket.emit('sendMessage', {
+      ...messageData,
+      _id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    });
     dispatch(addMessage(messageData));
     socket.emit('stopTyping', {
       roomId,

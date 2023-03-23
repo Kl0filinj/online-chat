@@ -16,27 +16,28 @@ const UserNavigation = () => {
     navigate('/');
   };
   return (
-    <Box bgColor={'red'} display={'flex'} justifyContent={'end'}>
-      <Box>
-        <Text
-          as={'span'}
-          // textShadow={
-          //   '    0 0 1px #fff,    0 0 2px #fff,    0 0 5px #fff,    0 0 11px #ae00ff,    0 0 20px #ae00ff,    0 0 30px #ae00ff,    0 0 55px #ae00ff,    0 0 80px #ae00ff'
-          // }
-        >
+    <Box
+      borderBottom={'4px'}
+      borderBottomRadius={'md'}
+      py={'2'}
+      mb={'5'}
+      display={'flex'}
+      justifyContent={'end'}
+    >
+      <Box display={'flex'} alignItems={'end'}>
+        <Text as={'span'} fontSize={'xl'} mr={'3'}>
           Hi,{' '}
           <Text as={'b'} textDecoration={'underline'}>
             {name}
           </Text>
         </Text>
-        {/* <Divider orientation={'vertical'} /> */}
 
         <IconButton
           variant={'unstyled'}
           aria-label="Exit from account"
           icon={
             <ExitIcon
-              boxSize={'30px'}
+              boxSize={'40px'}
               transitionProperty={'fill'}
               transitionDuration={'250ms'}
               transitionTimingFunction={'cubic-bezier(0.4, 0, 0.2, 1)'}

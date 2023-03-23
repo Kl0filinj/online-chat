@@ -37,10 +37,6 @@ const Register = () => {
     if (data.type === 'auth/register/fulfilled') {
       dispatch(login({ email: values.email, password: values.password }));
     }
-    // if (!data.payload) {
-    //   errorToast('Please try again later');
-    // }
-    // data.error && errorToast(data.payload.message);
   };
 
   return (
@@ -116,7 +112,6 @@ const Register = () => {
                 fontWeight="normal"
                 lineHeight="1.33"
                 letterSpacing="0.04em"
-                // color="accent.grey"
                 textAlign="center"
               >
                 Already have an account?

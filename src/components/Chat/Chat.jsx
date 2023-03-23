@@ -8,7 +8,6 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-// import { v4 as uuidv4 } from 'uuid';
 import Loader from 'components/Loader/Loader';
 import { EmojiIcon, SendIcon } from 'components/sheared/customIcons';
 import React, { useState } from 'react';
@@ -23,8 +22,7 @@ import {
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
 import useChat from 'hooks/useChat';
-// import socket from 'utils/socketConnection';
-// import warningToast from 'components/sheared/Toasts/warningToast';
+import socket from 'utils/socketConnection';
 
 const Chat = () => {
   const [isEmojiBarOpen, setIsEmojiBarOpen] = useState(false);
@@ -39,19 +37,10 @@ const Chat = () => {
     authorChecker,
     onMessageTyping,
   } = useChat(roomId);
-  // const getMessageTime = iso => {
-  //   const dateObj = new Date(iso);
-  //   const hour = dateObj.getUTCHours();
-  //   const minute = dateObj.getUTCMinutes();
-  //   return `${hour}:${minute}`;
-  // };
 
   const handleDisconnect = () => {
-    // warningToast(`User ${name} left the chat !`, {
-    //   autoClose: 30000,
-    // });
-    // socket.emit('leaveRoom', roomId);
     console.log('USER LEFT ROOM');
+    socket.emit('leaveRoom', roomId);
   };
 
   return (
@@ -67,8 +56,14 @@ const Chat = () => {
       >
         <Text>
           Room:{' '}
-          <Text as={'b'} fontSize={'xl'}>
+          <Text as={'b'} fontSize={'2xl'} color={'purple.400'}>
             {roomName}
+          </Text>
+        </Text>
+        <Text>
+          Users Online:
+          <Text as={'b'} fontSize={'2xl'} color={'purple.400'}>
+            999
           </Text>
         </Text>
         <Button colorScheme={'purple'} onClick={handleDisconnect}>
@@ -83,12 +78,13 @@ const Chat = () => {
               <>
                 {messages?.length !== 0 ? (
                   <>
-                    {messages?.map(({ text, author, _id }) => (
+                    {messages?.map(({ text, author, _id, createdAt }) => (
                       <Message
                         key={_id}
                         text={text}
                         author={author}
                         authorChecker={authorChecker}
+                        createdAt={createdAt}
                       />
                     ))}
                     {typingResponse !== '' && (

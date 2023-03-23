@@ -3,7 +3,6 @@ import { BiDoorOpen } from 'react-icons/bi';
 import { AiOutlineSend } from 'react-icons/ai';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
 
-// 2. Use the `as` prop
 export const ExitIcon = ({ ...rest }) => {
   return <Icon as={BiDoorOpen} {...rest} />;
 };

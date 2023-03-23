@@ -1,17 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  getAllRooms,
-  getRoomById,
-  addMessage,
-  // addUser,
-} from './room-operations';
-// import persistReducer from 'redux-persist/es/persistReducer';
-// import storage from 'redux-persist/lib/storage';
-// import {
-//   register,
-//   login,
-
-// } from './auth-operations';
+import { getAllRooms, getRoomById, addMessage } from './room-operations';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -22,12 +10,6 @@ const handleRejected = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
 };
-
-// const authPersistConfig = {
-//   key: 'auth',
-//   storage,
-//   whitelist: ['token'],
-// };
 
 const initialState = {
   rooms: [],
@@ -66,34 +48,23 @@ const roomSlice = createSlice({
 
       .addCase(addMessage.fulfilled, (state, { payload }) => {
         console.log('ADD MESSGAE ');
-        state.currentRoom.messages = [...state.currentRoom.messages, payload];
+        state.currentRoom.messages = [
+          ...state.currentRoom.messages,
+          { ...payload, createdAt: new Date().toISOString() },
+        ];
         state.isLoading = false;
         state.error = null;
       })
       .addCase(addMessage.rejected, (state, action) => {
         handleRejected(state, action);
       });
-
-    // .addCase(addUser.fulfilled, (state, { payload }) => {
-    //   console.log('ADD USER ');
-    //   state.currentRoom.residents = [payload, ...state.currentRoom.residents];
-    //   state.isLoading = false;
-    //   state.error = null;
-    // })
-    // .addCase(addUser.rejected, (state, action) => {
-    //   handleRejected(state, action);
-    // });
   },
   reducers: {
     addReceivedMessage(state, { payload }) {
       state.currentRoom.messages = [...state.currentRoom.messages, payload];
     },
-    // addactiveUser(state, { payload }) {
-    //   state.currentRoom.residents = [payload, ...state.currentRoom.residents];
-    // },
   },
 });
 
-// export const authReducer = persistReducer(authPersistConfig, authSlice.reducer);
 export const { addReceivedMessage, addactiveUser } = roomSlice.actions;
 export const roomReducer = roomSlice.reducer;

@@ -22,6 +22,11 @@ const RoomsHub = () => {
 
   useEffect(() => {
     dispatch(getAllRooms());
+
+    socket.on('leaveRoomResp', data => {
+      console.log('leaveRoomResp');
+      document.location.reload();
+    });
   }, [dispatch]);
 
   return (
@@ -34,12 +39,7 @@ const RoomsHub = () => {
       >
         CHOOSE ROOM FOR CHATING
       </Heading>
-      <Box
-        // position="relative"
-        // width={{ base: '280px', md: '448px', xl: '458px' }}
-        mx={'auto'}
-        my={'10'}
-      >
+      <Box mx={'auto'} my={'10'}>
         <Wrap spacing={4} justify="center">
           {!isLoading ? (
             <>
@@ -47,7 +47,7 @@ const RoomsHub = () => {
                 <WrapItem
                   key={_id}
                   margin={'10px !important'}
-                  w={'44'}
+                  w={'3xs'}
                   h={'100px'}
                   className="gradient-border"
                 >
