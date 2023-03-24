@@ -55,7 +55,9 @@ const RoomsHub = () => {
                   className="gradient-border"
                 >
                   <Box>
-                    <Heading fontSize={'2xl'}>{name}</Heading>
+                    <Heading fontSize={'2xl'} textTransform={'uppercase'}>
+                      {name}
+                    </Heading>
                     <Link as={NavLink} to={_id} onClick={() => handleJoin(_id)}>
                       Get in room <ExternalLinkIcon mx="2px" />
                     </Link>
