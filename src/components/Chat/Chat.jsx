@@ -49,15 +49,20 @@ const Chat = () => {
       <Box
         display={'flex'}
         justifyContent={'space-between'}
-        px={'10'}
-        py={'3'}
+        alignItems={'center'}
+        px={{ base: '3', sm: '10' }}
+        py={{ base: '1', sm: '3' }}
         bgColor={'#222222'}
         borderBottom={'4px'}
         borderColor={'purple.700'}
       >
         <Text>
           Room:{' '}
-          <Text as={'b'} fontSize={'2xl'} color={'purple.400'}>
+          <Text
+            as={'b'}
+            fontSize={{ base: 'lg', sm: '2xl' }}
+            color={'purple.400'}
+          >
             {roomName}
           </Text>
         </Text>
@@ -70,13 +75,13 @@ const Chat = () => {
                   display={'flex'}
                   alignItems={'center'}
                   fontWeight={'bold'}
-                  fontSize={'2xl'}
+                  fontSize={{ base: 'lg', sm: '2xl' }}
                   color={'purple.400'}
                   _before={{
                     content: '""',
                     display: 'inline-block',
-                    w: '10px',
-                    h: '10px',
+                    w: '7px',
+                    h: '7px',
                     mr: '5px',
                     borderRadius: '50%',
                     bgColor: 'whatsapp.500',
@@ -88,7 +93,11 @@ const Chat = () => {
             ))}
           </Wrap>
         </Box>
-        <Button colorScheme={'purple'} onClick={handleDisconnect}>
+        <Button
+          colorScheme={'purple'}
+          onClick={handleDisconnect}
+          size={{ base: 'xs', sm: 'md' }}
+        >
           Change Room
         </Button>
       </Box>
