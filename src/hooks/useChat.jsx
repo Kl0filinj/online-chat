@@ -53,14 +53,11 @@ const useChat = roomId => {
 
     socket.on('leaveRoomResp', data => {
       console.log('USER', data, 'DISCONNECTED');
-      dispatch(removeNewReceivedUser(data));
-      warningToast(`User ${name} left the chat !`, {
+      dispatch(removeNewReceivedUser(data.userId));
+      warningToast(`User ${data.userName} left the chat !`, {
         autoClose: 10000,
       });
     });
-    return () => {
-      console.log('DISCONNECT');
-    };
   }, [dispatch, roomId, _id, name]);
 
   const sendMessage = () => {
@@ -82,12 +79,12 @@ const useChat = roomId => {
     setCurrentMessage('');
   };
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = () => {
     console.log('USER LEFT ROOM');
 
     dispatch(removeNewUser(roomId));
     navigate('/rooms');
-    socket.emit('leaveRoom', roomId);
+    socket.emit('leaveRoom', { roomId, userId: _id, userName: name });
 
     console.log('roomId disconnect ', roomId);
   };

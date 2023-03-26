@@ -24,9 +24,7 @@ const RoomsHub = () => {
     dispatch(getAllRooms());
 
     socket.on('leaveRoomResp', data => {
-      console.log(document.location.pathname);
       if (document.location.pathname === '/online-chat/rooms') {
-        console.log('leaveRoomResp');
         document.location.reload();
       }
     });

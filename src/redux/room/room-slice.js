@@ -75,12 +75,15 @@ const roomSlice = createSlice({
         handleRejected(state, action);
       })
 
+      .addCase(removeNewUser.pending, state => {
+        handlePending(state);
+      })
       .addCase(removeNewUser.fulfilled, (state, { payload }) => {
-        console.log('REMOVE USER ');
-        const index = state.currentRoom.residents.findIndex(
-          item => item._id === payload._id
-        );
-        state.currentRoom.residents.splice(index, 1);
+        console.log('REMOVE USER');
+        // const index = state.currentRoom.residents.findIndex(
+        //   item => item._id === payload.userId
+        // );
+        // state.currentRoom.residents.splice(index, 1);
         state.isLoading = false;
         state.error = null;
       })
@@ -96,8 +99,9 @@ const roomSlice = createSlice({
       state.currentRoom.residents = [...state.currentRoom.residents, payload];
     },
     removeNewReceivedUser(state, { payload }) {
+      console.log(payload);
       const index = state.currentRoom.residents.findIndex(
-        item => item._id === payload._id
+        item => item._id === payload.userId
       );
       state.currentRoom.residents.splice(index, 1);
     },
