@@ -30,7 +30,7 @@ const useChat = roomId => {
     dispatch(getRoomById(roomId));
 
     socket.on('newUser', data => {
-      console.log('NEW USER CONNECTED', data);
+      // console.log('NEW USER CONNECTED', data);
       data.userName === name
         ? dispatch(addNewUser(roomId))
         : dispatch(
@@ -42,17 +42,17 @@ const useChat = roomId => {
     });
 
     socket.on('receiveMessage', data => {
-      console.log('RECEIVE', data);
+      // console.log('RECEIVE', data);
       dispatch(addReceivedMessage(data));
     });
 
     socket.on('typingResponse', data => {
-      console.log('TYPING RESP');
+      // console.log('TYPING RESP');
       data === 'stop' ? setTypingResponse('') : setTypingResponse(data);
     });
 
     socket.on('leaveRoomResp', data => {
-      console.log('USER', data, 'DISCONNECTED');
+      // console.log('USER', data, 'DISCONNECTED');
       dispatch(removeNewReceivedUser(data.userId));
       warningToast(`User ${data.userName} left the chat !`, {
         autoClose: 10000,
@@ -80,13 +80,11 @@ const useChat = roomId => {
   };
 
   const handleDisconnect = () => {
-    console.log('USER LEFT ROOM');
-
     dispatch(removeNewUser(roomId));
     navigate('/rooms');
     socket.emit('leaveRoom', { roomId, userId: _id, userName: name });
 
-    console.log('roomId disconnect ', roomId);
+    // console.log('roomId disconnect ', roomId);
   };
 
   const onEmojiClick = ({ emoji }) =>

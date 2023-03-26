@@ -53,7 +53,6 @@ const roomSlice = createSlice({
       })
 
       .addCase(addMessage.fulfilled, (state, { payload }) => {
-        console.log('ADD MESSGAE ');
         state.currentRoom.messages = [
           ...state.currentRoom.messages,
           { ...payload, createdAt: new Date().toISOString() },
@@ -66,7 +65,6 @@ const roomSlice = createSlice({
       })
 
       .addCase(addNewUser.fulfilled, (state, { payload }) => {
-        console.log('ADD USER ');
         state.currentRoom.residents = [...state.currentRoom.residents, payload];
         state.isLoading = false;
         state.error = null;
@@ -79,7 +77,6 @@ const roomSlice = createSlice({
         handlePending(state);
       })
       .addCase(removeNewUser.fulfilled, state => {
-        console.log('REMOVE USER');
         state.isLoading = false;
         state.error = null;
       })
@@ -95,7 +92,6 @@ const roomSlice = createSlice({
       state.currentRoom.residents = [...state.currentRoom.residents, payload];
     },
     removeNewReceivedUser(state, { payload }) {
-      console.log(payload);
       const index = state.currentRoom.residents.findIndex(
         item => item._id === payload.userId
       );

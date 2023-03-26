@@ -16,7 +16,7 @@ const RoomsHub = () => {
   const { name, _id } = useSelector(userSelector);
 
   const handleJoin = roomId => {
-    console.log(`Connection to room ${roomId}`);
+    // console.log(`Connection to room ${roomId}`);
     socket.emit('joinRoom', { roomId, userName: name, userId: _id });
   };
 

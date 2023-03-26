@@ -77,7 +77,6 @@ export const removeNewUser = createAsyncThunk(
   'rooms/removeNewUser',
   async (roomId, { rejectWithValue }) => {
     try {
-      console.log(roomId);
       const { data } = await instance.delete(`/api/rooms/residents/${roomId}`);
 
       return data;
