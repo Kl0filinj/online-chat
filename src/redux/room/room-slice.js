@@ -78,12 +78,8 @@ const roomSlice = createSlice({
       .addCase(removeNewUser.pending, state => {
         handlePending(state);
       })
-      .addCase(removeNewUser.fulfilled, (state, { payload }) => {
+      .addCase(removeNewUser.fulfilled, state => {
         console.log('REMOVE USER');
-        // const index = state.currentRoom.residents.findIndex(
-        //   item => item._id === payload.userId
-        // );
-        // state.currentRoom.residents.splice(index, 1);
         state.isLoading = false;
         state.error = null;
       })
